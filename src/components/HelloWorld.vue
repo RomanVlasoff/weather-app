@@ -1,5 +1,4 @@
 <template>
-
   <v-container>
     <v-text-field
         v-model="searchText"
@@ -9,13 +8,24 @@
         :placeholder="$t('exampleCity')"
         prepend-inner-icon="mdi-map-marker"
         append-outer-icon="mdi-magnify"
+        :rules="searchFieldRules"
         :error-messages="isShowErrorMessage ? [$t('errors.noCityWithEnteredName')] : []"
         @click:append-outer="onSearchSubmit"
         @keyup.enter="onSearchSubmit"
-    ></v-text-field>
+    />
+    <div class="mb-2">
+      <v-chip
+          v-for="city in searchHistory"
+          :key="city[currentLocale]"
+          @click="onHistoryItemClick(city)"
+          class="ma-0 mr-2 mb-2"
+      >
+        {{ city[currentLocale] }}
+      </v-chip>
+    </div>
 
     <v-card
-        class="mx-auto"
+        class="mx-auto weather-card"
         max-width="800"
     >
       <v-list-item two-line v-if="currentCity">
@@ -23,7 +33,7 @@
           <v-list-item-title class="text-h5">
             {{ currentCity.local_names[$i18n.locale] }}
           </v-list-item-title>
-          <!--          <v-list-item-subtitle>Mon, 12:30 PM, Mostly sunny</v-list-item-subtitle>-->
+          <v-list-item-subtitle>{{ currentWeatherFormattedData.time }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -56,69 +66,34 @@
         </v-row>
       </v-card-text>
 
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon>mdi-weather-windy</v-icon>
-        </v-list-item-icon>
-        <v-list-item-subtitle>{{currentWeatherFormattedData.wind}}</v-list-item-subtitle>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon>mdi-water-percent</v-icon>
-        </v-list-item-icon>
-        <v-list-item-subtitle>{{currentWeatherFormattedData.humidity}}</v-list-item-subtitle>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon>mdi-gauge</v-icon>
-        </v-list-item-icon>
-        <v-list-item-subtitle>{{currentWeatherFormattedData.pressure}}</v-list-item-subtitle>
-      </v-list-item>
-
-      <!--      <v-slider-->
-      <!--          v-model="time"-->
-      <!--          :max="6"-->
-      <!--          :tick-labels="labels"-->
-      <!--          class="mx-4"-->
-      <!--          ticks-->
-      <!--      ></v-slider>-->
-
-      <!--      <v-list class="transparent">-->
-      <!--        <v-list-item-->
-      <!--            v-for="item in forecast"-->
-      <!--            :key="item.day"-->
-      <!--        >-->
-      <!--          <v-list-item-title>{{ item.day }}</v-list-item-title>-->
-
-      <!--          <v-list-item-icon>-->
-      <!--            <v-icon>{{ item.icon }}</v-icon>-->
-      <!--          </v-list-item-icon>-->
-
-      <!--          <v-list-item-subtitle class="text-right">-->
-      <!--            {{ item.temp }}-->
-      <!--          </v-list-item-subtitle>-->
-      <!--        </v-list-item>-->
-      <!--      </v-list>-->
-
-      <!--      <v-divider></v-divider>-->
-
-      <!--      <v-card-actions>-->
-      <!--        <v-btn text>-->
-      <!--          Full Report-->
-      <!--        </v-btn>-->
-      <!--      </v-card-actions>-->
+      <v-row>
+        <v-col cols="3">
+          <v-list-item dense>
+            <v-list-item-icon>
+              <v-icon>mdi-weather-windy</v-icon>
+            </v-list-item-icon>
+            <v-list-item-subtitle>{{ currentWeatherFormattedData.wind }}</v-list-item-subtitle>
+          </v-list-item>
+        </v-col>
+        <v-col cols="3">
+          <v-list-item dense>
+            <v-list-item-icon>
+              <v-icon>mdi-water-percent</v-icon>
+            </v-list-item-icon>
+            <v-list-item-subtitle>{{ currentWeatherFormattedData.humidity }}</v-list-item-subtitle>
+          </v-list-item>
+        </v-col>
+        <v-col cols="3">
+          <v-list-item dense>
+            <v-list-item-icon>
+              <v-icon>mdi-gauge</v-icon>
+            </v-list-item-icon>
+            <v-list-item-subtitle>{{ currentWeatherFormattedData.pressure }}</v-list-item-subtitle>
+          </v-list-item>
+        </v-col>
+      </v-row>
     </v-card>
 
-    <div>
-      <v-chip
-          v-for="city in searchHistory"
-          :key="city[currentLocale]"
-          @click="onHistoryItemClick(city)"
-          class="ma-2"
-      >
-        {{city[currentLocale]}}
-      </v-chip>
-    </div>
 
   </v-container>
 </template>
@@ -140,33 +115,17 @@ export default {
       currentWeather: null,
       searchHistory: [],
       isShowErrorMessage: null,
-
       unsubscribeFromSearchHistoryChange: () => {},
-
-      // labels: ['SU', 'MO', 'TU', 'WED', 'TH', 'FR', 'SA'],
-      // time: 0,
-      // forecast: [
-      //   { day: 'Tuesday', icon: 'mdi-white-balance-sunny', temp: '24\xB0/12\xB0' },
-      //   { day: 'Wednesday', icon: 'mdi-white-balance-sunny', temp: '22\xB0/14\xB0' },
-      //   { day: 'Thursday', icon: 'mdi-cloud', temp: '25\xB0/15\xB0' },
-      // ],
+      searchFieldRules: [
+        () => !!this.searchText && this.searchText.length || this.$t('errors.cityNameIsRequired'),
+      ]
     }
   },
   computed: {
-    // currentWeatherImageUrl() {
-    //   if (!this.currentWeather) return '';
-    //
-    //   return getWeatherIconUrlByName(this.currentWeather.weather[0].icon);
-    // },
-    // currentWeatherStateText() {
-    //   if (!this.currentWeather) return '';
-    //
-    //   return capitalizeFirstLetter(this.currentWeather.weather[0].description);
-    // },
     currentWeatherFormattedData() {
       if (!this.currentWeather) return {}
 
-      // const t = this.$t.bind(this.$vuetify.lang);
+      const date = new Date((this.currentWeather.dt + (this.currentWeather.timezone)) * 1000);
 
       return {
         imageUrl: getWeatherIconUrlByName(this.currentWeather.weather[0].icon),
@@ -177,12 +136,13 @@ export default {
           max: formatTemperature(this.currentWeather.main.temp_max),
           min: formatTemperature(this.currentWeather.main.temp_min)
         }),
-        pressure: this.$t('pressureValue', { value: this.currentWeather.main.pressure }),
+        pressure: this.$t('pressureValue', {value: this.currentWeather.main.pressure}),
         humidity: `${this.currentWeather.main.humidity}%`,
         wind: this.$t('wind.speedAndDirection', {
           speed: this.currentWeather.wind.speed,
           direction: this.$t(`wind.directions.${getWindDirection(this.currentWeather.wind.deg)}`)
         }),
+        time: this.$t('timeNow', { time: `${date.getUTCHours()}:${date.getUTCMinutes()}` })
       }
     },
     currentLocale() {
@@ -209,6 +169,10 @@ export default {
     },
     async fetchCity() {
       console.log('Fetch city')
+      if (!this.searchText) {
+        return;
+      }
+
       this.currentCity = await getCityByLocationName(this.searchText);
       this.isShowErrorMessage = !this.currentCity;
     },
@@ -247,9 +211,6 @@ export default {
       setUserSearchHistory(e);
       this.searchHistory = e;
     });
-
-
-    // console.log(this.$vuetify.lang)
   },
   destroyed() {
     window.removeEventListener('popstate', this.initData);
@@ -257,3 +218,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.weather-card {
+  background: linear-gradient(45deg, rgb(2, 136, 209), rgb(38, 198, 218));
+}
+</style>

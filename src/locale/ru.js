@@ -5,11 +5,15 @@ export default {
     $vuetify: {
         ...ru,
     },
+
+    appName: 'EasyWeatherApp',
+
     city: 'Город',
     exampleCity: 'Москва',
     feelsLike: 'Ощущается как {temp}',
     maxMinTemp: 'Макс. {max}, мин. {min}',
     pressureValue: '{value} мм рт. ст.',
+    timeNow: 'Сейчас {time}',
 
     wind: {
         speedAndDirection: '{speed} м/с, {direction}',
@@ -32,6 +36,7 @@ export default {
 
     errors: {
         noCityWithEnteredName: 'Город с указанным названием не найден',
-        requestError: 'Что-то пошло не так...'
+        requestError: 'Что-то пошло не так...',
+        cityNameIsRequired: 'Введите название города'
     }
 }

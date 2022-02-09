@@ -1,10 +1,25 @@
 <template>
   <v-app>
+    <v-app-bar
+        app
+        absolute
+        color="white"
+    >
+      <v-toolbar-title>{{$t('appName')}}</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <SelectLanguage />
+
+    </v-app-bar>
+
     <v-main>
       <HelloWorld/>
     </v-main>
 
-    <SelectLanguage />
+<!--    <v-footer app>-->
+<!--      <SelectLanguage />-->
+<!--    </v-footer>-->
 
     <v-snackbar
         v-model="isFlashErrorShow"

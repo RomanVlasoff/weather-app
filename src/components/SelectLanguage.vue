@@ -1,14 +1,31 @@
 <template>
-  <v-select
-      v-model="currentLanguage"
-      :items="selectItems"
-      menu-props="auto"
-      :label="$t('i18n.selectLanguage')"
-      hide-details
-      prepend-icon="mdi-web"
-      single-line
-      outlined
-  ></v-select>
+  <v-menu offset-y open-on-hover>
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn
+          text
+          v-bind="attrs"
+          v-on="on"
+      >
+        <v-icon>mdi-translate</v-icon>
+        <v-icon x-small light>mdi-chevron-down</v-icon>
+      </v-btn>
+    </template>
+    <v-list dense>
+      <v-list-item-group
+          color="primary"
+          v-model="$i18n.locale"
+      >
+        <v-list-item
+            v-for="item in selectItems"
+            :key="item.value"
+            :value="item.value"
+            selectable
+        >
+          <v-list-item-title>{{ item.text }}</v-list-item-title>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+  </v-menu>
 </template>
 
 <script>
@@ -17,40 +34,12 @@ import locales from '../locale/locales'
 export default {
   name: "SelectLanguage",
   computed: {
-    currentLanguage: {
-      get() {
-        // return this.$vuetify.lang.current;
-        return this.$i18n.locale;
-      },
-      set(locale) {
-        // this.$vuetify.lang.current = lang;
-        this.$i18n.locale = locale;
-      }
-    },
     selectItems() {
-
-      // $vuetify.lang.t('$vuetify.i18n.selectLanguage')
-
-      // return Object.keys(this.$vuetify.lang.locales)
-
-      // return Object.keys(this.$vuetify.lang.locales).map(locale => ({
-      //   text: this.$vuetify.lang.t('$vuetify.i18n.selectLanguage', )
-      // }));
-
       return locales.map(locale => ({
-        // text: this.$vuetify.lang.locales[locale].i18n.languageName,
         text: this.$t('i18n.languageName', locale),
-        // text: 'temp',
         value: locale
       }))
     },
-    // temp() {
-    //   return this.$vuetify.lang.locales
-    // }
   }
 }
 </script>
-
-<style scoped>
-
-</style>
