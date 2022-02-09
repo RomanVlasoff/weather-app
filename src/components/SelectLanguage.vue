@@ -16,7 +16,7 @@
           v-model="$i18n.locale"
       >
         <v-list-item
-            v-for="item in selectItems"
+            v-for="item in items"
             :key="item.value"
             :value="item.value"
             selectable
@@ -34,7 +34,7 @@ import locales from '../locale/locales'
 export default {
   name: "SelectLanguage",
   computed: {
-    selectItems() {
+    items() {
       return locales.map(locale => ({
         text: this.$t('i18n.languageName', locale),
         value: locale

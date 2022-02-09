@@ -25,8 +25,7 @@
 
         <v-card-text>
           <div class="d-flex flex-row align-center flex-wrap">
-            <div class="text-h2"
-            >
+            <div class="text-h2">
               {{ formattedData.temp }}
             </div>
             <div>
@@ -70,10 +69,7 @@ import {capitalizeFirstLetter, formatTemperature, getWindDirection} from "../uti
 export default {
   name: "WeatherCard",
   props: {
-    loading: {
-      type: Boolean,
-      default: false
-    },
+    loading: Boolean,
     cityName: {
       type: String,
       required: true,
@@ -106,25 +102,29 @@ export default {
         minutes = date.getUTCMinutes().toLocaleString(this.$i18n.locale, {minimumIntegerDigits: 2});
       }
 
+      const safeFormat = (value, formatter, defaultValue = '') => {
+        return value == null ? defaultValue : formatter();
+      }
+
       return {
-        state: this.state ? capitalizeFirstLetter(this.state) : '',
-        temp: this.temp ? formatTemperature(this.temp) : null,
-        feelsLikeTemp: this.feelsLikeTemp ? this.$t('feelsLike', {temp: formatTemperature(this.feelsLikeTemp)}) : null,
-        maxMinTemp: this.maxTemp && this.minTemp
+        state: safeFormat(this.state, () => capitalizeFirstLetter(this.state)),
+        temp: safeFormat(this.temp, () => formatTemperature(this.temp)),
+        feelsLikeTemp: safeFormat(this.feelsLikeTemp, () => this.$t('feelsLike', {temp: formatTemperature(this.feelsLikeTemp)})),
+        maxMinTemp: this.maxTemp != null && this.minTemp != null
             ? this.$t('maxMinTemp', {
               max: formatTemperature(this.maxTemp),
               min: formatTemperature(this.minTemp)
             })
             : null,
-        pressure: this.pressure ? this.$t('pressureValue', {value: this.pressure}) : null,
-        humidity: this.humidity ? `${this.humidity}%` : null,
-        wind: this.windSpeed && this.windDeg
+        pressure: safeFormat(this.pressure, () => this.$t('pressureValue', {value: this.pressure})),
+        humidity: safeFormat(this.humidity, () => `${this.humidity}%`),
+        wind: this.windSpeed != null && this.windDeg != null
             ? this.$t('wind.speedAndDirection', {
               speed: this.windSpeed,
               direction: this.$t(`wind.directions.${getWindDirection(this.windDeg)}`)
             })
             : null,
-        time: date ? this.$t('timeNow', {time: `${hours}:${minutes}`}) : null,
+        time: safeFormat(date, () => this.$t('timeNow', {time: `${hours}:${minutes}`})),
       }
     },
     mainProperties() {

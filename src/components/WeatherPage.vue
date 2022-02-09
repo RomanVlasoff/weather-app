@@ -10,7 +10,7 @@
         prepend-inner-icon="mdi-map-marker"
         append-outer-icon="mdi-magnify"
         :rules="searchFieldRules"
-        :error-messages="isShowNoEnteredCityMessage ? [$t('errors.noCityWithEnteredName')] : []"
+        :error-messages="inputErrorMessages"
         @click:append-outer="onSearchSubmit"
         @keyup.enter="onSearchSubmit"
     />
@@ -37,7 +37,6 @@
           :time-zone="currentWeather.timezone"
       />
     </v-slide-y-reverse-transition>
-
   </v-container>
 </template>
 
@@ -74,6 +73,9 @@ export default {
     currentCityName() {
       const names = this.currentCity?.local_names || [];
       return names[this.$i18n.locale] || names['en'] || Object.values(names)[0] || '';
+    },
+    inputErrorMessages() {
+      return this.isShowNoEnteredCityMessage ? [this.$t('errors.noCityWithEnteredName')] : [];
     }
   },
   methods: {
