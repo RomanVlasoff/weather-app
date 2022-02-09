@@ -1,13 +1,10 @@
 import {ru} from 'vuetify/lib/locale'
 
 export default {
-    // ...ru,
     $vuetify: {
         ...ru,
     },
-
     appName: 'EasyWeatherApp',
-
     city: 'Город',
     exampleCity: 'Москва',
     feelsLike: 'Ощущается как {temp}',
@@ -16,8 +13,6 @@ export default {
     timeNow: 'Сейчас {time}',
     humidity: 'Влажность',
     pressure: 'Атмосферное давление',
-
-
     wind: {
         wind: 'Ветер',
         speedAndDirection: '{speed} м/с, {direction}',
@@ -32,12 +27,10 @@ export default {
             NW: 'СЗ'
         },
     },
-
     i18n: {
         selectLanguage: 'Выберите язык',
         languageName: 'Русский'
     },
-
     errors: {
         noCityWithEnteredName: 'Город с указанным названием не найден',
         requestError: 'Что-то пошло не так...',

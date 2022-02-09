@@ -18,14 +18,14 @@ export default {
   name: "SearchHistory",
   computed: {
     ...mapGetters([
-        'searchHistory'
+      'searchHistory'
     ]),
   },
   methods: {
     ...mapActions([
-        'fetchHistory',
-        'subscribeOnHistoryChange',
-        'unsubscribeFromHistoryChange',
+      'fetchHistory',
+      'subscribeOnHistoryChange',
+      'unsubscribeFromHistoryChange',
     ]),
   },
   created() {

@@ -11,10 +11,7 @@
            class="progress-wrapper"
            key="progress"
       >
-        <v-progress-circular
-                             indeterminate
-                             color="white"
-        />
+        <v-progress-circular indeterminate color="white"/>
       </div>
       <div v-else key="weather-card-content">
         <v-list-item two-line>
@@ -41,9 +38,9 @@
               />
             </div>
             <div class="d-flex flex-column">
-                <span>{{ formattedData.state }}</span>
-                <span>{{ formattedData.feelsLikeTemp }}</span>
-                <span>{{ formattedData.maxMinTemp }} </span>
+              <span>{{ formattedData.state }}</span>
+              <span>{{ formattedData.feelsLikeTemp }}</span>
+              <span>{{ formattedData.maxMinTemp }} </span>
             </div>
           </div>
         </v-card-text>
@@ -96,7 +93,7 @@ export default {
     windDeg: [String, Number],
     timeStamp: [String, Number],
     timeZone: {
-      type:[String, Number],
+      type: [String, Number],
       default: 0
     }
   },
@@ -105,8 +102,8 @@ export default {
       let date, hours, minutes;
       if (this.timeStamp) {
         date = new Date((this.timeStamp + (this.timeZone)) * 1000);
-        hours = date.getUTCHours().toLocaleString(this.$i18n.locale, { minimumIntegerDigits: 2 });
-        minutes = date.getUTCMinutes().toLocaleString(this.$i18n.locale, { minimumIntegerDigits: 2 });
+        hours = date.getUTCHours().toLocaleString(this.$i18n.locale, {minimumIntegerDigits: 2});
+        minutes = date.getUTCMinutes().toLocaleString(this.$i18n.locale, {minimumIntegerDigits: 2});
       }
 
       return {
@@ -115,26 +112,26 @@ export default {
         feelsLikeTemp: this.feelsLikeTemp ? this.$t('feelsLike', {temp: formatTemperature(this.feelsLikeTemp)}) : null,
         maxMinTemp: this.maxTemp && this.minTemp
             ? this.$t('maxMinTemp', {
-                max: formatTemperature(this.maxTemp),
-                min: formatTemperature(this.minTemp)
-              })
+              max: formatTemperature(this.maxTemp),
+              min: formatTemperature(this.minTemp)
+            })
             : null,
         pressure: this.pressure ? this.$t('pressureValue', {value: this.pressure}) : null,
         humidity: this.humidity ? `${this.humidity}%` : null,
         wind: this.windSpeed && this.windDeg
             ? this.$t('wind.speedAndDirection', {
-                speed: this.windSpeed,
-                direction: this.$t(`wind.directions.${getWindDirection(this.windDeg)}`)
-              })
+              speed: this.windSpeed,
+              direction: this.$t(`wind.directions.${getWindDirection(this.windDeg)}`)
+            })
             : null,
         time: date ? this.$t('timeNow', {time: `${hours}:${minutes}`}) : null,
       }
     },
     mainProperties() {
       return [
-        { icon: 'mdi-weather-windy', value: this.formattedData.wind, title: this.$t('wind.wind') },
-        { icon: 'mdi-water-percent', value: this.formattedData.humidity, title: this.$t('humidity') },
-        { icon: 'mdi-gauge', value: this.formattedData.pressure, title: this.$t('pressure') },
+        {icon: 'mdi-weather-windy', value: this.formattedData.wind, title: this.$t('wind.wind')},
+        {icon: 'mdi-water-percent', value: this.formattedData.humidity, title: this.$t('humidity')},
+        {icon: 'mdi-gauge', value: this.formattedData.pressure, title: this.$t('pressure')},
       ]
     }
   }
@@ -142,16 +139,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .weather-card {
-    background: #2f80ed;
-    background: -webkit-linear-gradient(to right, #2f80ed, #56ccf2);
-    background: linear-gradient(to right, #2f80ed, #56ccf2);
-    padding: 16px;
-    .progress-wrapper {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translateX(-50%) translateY(-50%);
-    }
+.weather-card {
+  background: #2f80ed;
+  background: -webkit-linear-gradient(to right, #2f80ed, #56ccf2);
+  background: linear-gradient(to right, #2f80ed, #56ccf2);
+  padding: 16px;
+
+  .progress-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
+}
 </style>

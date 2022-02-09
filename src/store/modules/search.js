@@ -1,4 +1,4 @@
-import { pick } from "lodash";
+import {pick} from "lodash";
 import locales from '../../locale/locales';
 import {getCityByLocationName} from "../../services/api";
 import {getUserCitySearchHistory, subscribeOnSearchHistoryChange, setUserSearchHistory} from "../../services/storage";
@@ -32,18 +32,18 @@ const mutations = {
 }
 
 const actions = {
-    addHistoryItem({ commit }, item) {
+    addHistoryItem({commit}, item) {
         commit('ADD_HISTORY_ITEM', item);
     },
-    async searchCityByLocationName({ dispatch }, name) {
+    async searchCityByLocationName({dispatch}, name) {
         const result = await getCityByLocationName(name);
         dispatch('addHistoryItem', result);
         return result;
     },
-    fetchHistory({ commit }) {
+    fetchHistory({commit}) {
         commit('SET_HISTORY', getUserCitySearchHistory());
     },
-    subscribeOnHistoryChange({ commit }) {
+    subscribeOnHistoryChange({commit}) {
         if (unsubscribeFromSearchHistoryChangeCallback) {
             return;
         }

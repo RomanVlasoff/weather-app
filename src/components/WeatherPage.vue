@@ -16,7 +16,7 @@
     />
 
     <SearchHistory class="mb-2"
-                   @itemClick="onHistoryItemClick" />
+                   @itemClick="onHistoryItemClick"/>
 
     <v-slide-y-reverse-transition>
       <WeatherCard
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { getCurrentWeatherForLocation, getWeatherIconUrlByName } from "../services/api";
+import {getCurrentWeatherForLocation, getWeatherIconUrlByName} from "../services/api";
 import {getUrlSearchParams, setUrlSearchParam} from "../utils/url";
 import WeatherCard from "./WeatherCard";
 import SearchHistory from "./SearchHistory";
@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     ...mapActions([
-        'searchCityByLocationName',
+      'searchCityByLocationName',
     ]),
     initData() {
       this.searchText = getUrlSearchParams().search || '';
@@ -112,8 +112,8 @@ export default {
       }
 
       this.isWeatherLoading = true;
-      const { lon, lat } = this.currentCity;
-      this.currentWeather = await getCurrentWeatherForLocation({ lon, lat }, this.$i18n.locale);
+      const {lon, lat} = this.currentCity;
+      this.currentWeather = await getCurrentWeatherForLocation({lon, lat}, this.$i18n.locale);
       this.isWeatherLoading = false;
     },
     getWeatherIconUrlByName,
@@ -131,7 +131,6 @@ export default {
   },
   created() {
     this.initData();
-
     window.addEventListener('popstate', this.initData);
   },
   destroyed() {

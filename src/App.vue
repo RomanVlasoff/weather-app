@@ -6,9 +6,9 @@
         color="white"
         flat
     >
-      <v-toolbar-title>{{$t('appName')}}</v-toolbar-title>
-      <v-spacer />
-      <SelectLanguage />
+      <v-toolbar-title>{{ $t('appName') }}</v-toolbar-title>
+      <v-spacer/>
+      <SelectLanguage/>
     </v-app-bar>
 
     <v-main>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import {mapGetters, mapMutations} from 'vuex';
 import WeatherPage from './components/WeatherPage';
 import SelectLanguage from './components/SelectLanguage';
 

@@ -3,7 +3,7 @@ export function getUrlSearchParams() {
     return Object.fromEntries(urlSearchParams.entries());
 }
 
-export function setUrlSearchParam(name, _value= '') {
+export function setUrlSearchParam(name, _value = '') {
     const value = _value === null ? '' : _value;
     const searchParams = new URLSearchParams(window.location.search)
     searchParams.set(name, value);
