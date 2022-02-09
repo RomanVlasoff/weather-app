@@ -5,12 +5,8 @@ const state = () => {
 }
 
 const getters = {
-    error: (state) => {
-        return state.error;
-    }
+    error: state => state.error,
 }
-
-const actions = {}
 
 const mutations = {
     SET_ERROR(state, errorKey) {
@@ -23,6 +19,8 @@ const mutations = {
         state.error = null;
     }
 }
+
+const actions = {}
 
 export default {
     state,

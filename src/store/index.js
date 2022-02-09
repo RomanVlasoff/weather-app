@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import main from './modules/main'
+import errors from './modules/errors'
+import search from './modules/search'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    main,
+    errors,
+    search,
   }
 })

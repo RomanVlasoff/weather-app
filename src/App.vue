@@ -6,20 +6,13 @@
         color="white"
     >
       <v-toolbar-title>{{$t('appName')}}</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
+      <v-spacer />
       <SelectLanguage />
-
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <WeatherPage/>
     </v-main>
-
-<!--    <v-footer app>-->
-<!--      <SelectLanguage />-->
-<!--    </v-footer>-->
 
     <v-snackbar
         v-model="isFlashErrorShow"
@@ -34,20 +27,15 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
-import HelloWorld from './components/HelloWorld';
+import WeatherPage from './components/WeatherPage';
 import SelectLanguage from './components/SelectLanguage';
 
 export default {
   name: 'App',
-
   components: {
-    HelloWorld,
+    WeatherPage,
     SelectLanguage
   },
-
-  data: () => ({
-    //
-  }),
   computed: {
     ...mapGetters({
       flashError: 'error'
