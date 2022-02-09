@@ -4,6 +4,7 @@
         app
         absolute
         color="white"
+        flat
     >
       <v-toolbar-title>{{$t('appName')}}</v-toolbar-title>
       <v-spacer />

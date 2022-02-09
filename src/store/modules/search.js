@@ -1,7 +1,7 @@
 import { pick } from "lodash";
 import locales from '../../locale/locales';
 import {getCityByLocationName} from "../../services/api";
-import {getUserCitySearchHistory, subscribeOnSearchHistoryChange, setUserSearchHistory} from "../../services/userData";
+import {getUserCitySearchHistory, subscribeOnSearchHistoryChange, setUserSearchHistory} from "../../services/storage";
 
 let unsubscribeFromSearchHistoryChangeCallback = null;
 
@@ -17,7 +17,9 @@ const getters = {
 
 const mutations = {
     ADD_HISTORY_ITEM(state, item) {
-        if (state.searchHistory.find(city => city['en'] === item.local_names['en'])) {
+        if (!item ||
+            !item.local_names ||
+            state.searchHistory.find(city => city['en'] === item.local_names['en'])) {
             return;
         }
 

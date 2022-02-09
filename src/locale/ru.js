@@ -14,8 +14,12 @@ export default {
     maxMinTemp: 'Макс. {max}, мин. {min}',
     pressureValue: '{value} мм рт. ст.',
     timeNow: 'Сейчас {time}',
+    humidity: 'Влажность',
+    pressure: 'Атмосферное давление',
+
 
     wind: {
+        wind: 'Ветер',
         speedAndDirection: '{speed} м/с, {direction}',
         directions: {
             N: 'С',

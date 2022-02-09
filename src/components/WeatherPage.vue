@@ -1,37 +1,42 @@
 <template>
-  <v-container>
+  <v-container class="pt-4 pt-md-10">
     <v-text-field
         v-model="searchText"
         filled
         clearable
+        rounded
         :label="$t('city')"
         :placeholder="$t('exampleCity')"
         prepend-inner-icon="mdi-map-marker"
         append-outer-icon="mdi-magnify"
         :rules="searchFieldRules"
-        :error-messages="isShowErrorMessage ? [$t('errors.noCityWithEnteredName')] : []"
+        :error-messages="isShowNoEnteredCityMessage ? [$t('errors.noCityWithEnteredName')] : []"
         @click:append-outer="onSearchSubmit"
         @keyup.enter="onSearchSubmit"
     />
 
-    <SearchHistory @itemClick="onHistoryItemClick" />
+    <SearchHistory class="mb-2"
+                   @itemClick="onHistoryItemClick" />
 
-    <WeatherCard
-        v-if="currentCity && currentWeather"
-        :city-name="currentCity.local_names[$i18n.locale]"
-        :image-url="getWeatherIconUrlByName(currentWeather.weather[0].icon)"
-        :state="currentWeather.weather[0].description"
-        :temp="currentWeather.main.temp"
-        :feels-like-temp="currentWeather.main.feels_like"
-        :max-temp="currentWeather.main.temp_max"
-        :min-temp="currentWeather.main.temp_min"
-        :pressure="currentWeather.main.pressure"
-        :humidity="currentWeather.main.humidity"
-        :wind-speed="currentWeather.wind.speed"
-        :wind-deg="currentWeather.wind.deg"
-        :time-stamp="currentWeather.dt"
-        :time-zone="currentWeather.timezone"
-    />
+    <v-slide-y-reverse-transition>
+      <WeatherCard
+          v-if="currentCity && currentWeather"
+          :loading="isCityLoading || isWeatherLoading"
+          :city-name="currentCityName"
+          :image-url="getWeatherIconUrlByName(currentWeather.weather[0].icon)"
+          :state="currentWeather.weather[0].description"
+          :temp="currentWeather.main.temp"
+          :feels-like-temp="currentWeather.main.feels_like"
+          :max-temp="currentWeather.main.temp_max"
+          :min-temp="currentWeather.main.temp_min"
+          :pressure="currentWeather.main.pressure"
+          :humidity="currentWeather.main.humidity"
+          :wind-speed="currentWeather.wind.speed"
+          :wind-deg="currentWeather.wind.deg"
+          :time-stamp="currentWeather.dt"
+          :time-zone="currentWeather.timezone"
+      />
+    </v-slide-y-reverse-transition>
 
   </v-container>
 </template>
@@ -51,10 +56,12 @@ export default {
   },
   data() {
     return {
+      isCityLoading: false,
+      isWeatherLoading: false,
       searchText: '',
       currentCity: null,
       currentWeather: null,
-      isShowErrorMessage: null,
+      isShowNoEnteredCityMessage: false,
       searchFieldRules: [
         () => !!this.searchText && this.searchText.length > 0 || this.$t('errors.cityNameIsRequired'),
       ]
@@ -63,6 +70,10 @@ export default {
   computed: {
     currentLocale() {
       return this.$i18n.locale;
+    },
+    currentCityName() {
+      const names = this.currentCity?.local_names || [];
+      return names[this.$i18n.locale] || names['en'] || Object.values(names)[0] || '';
     }
   },
   methods: {
@@ -70,7 +81,7 @@ export default {
         'searchCityByLocationName',
     ]),
     initData() {
-      this.searchText = getUrlSearchParams().search;
+      this.searchText = getUrlSearchParams().search || '';
       this.fetchCity();
     },
     onSearchSubmit() {
@@ -86,25 +97,30 @@ export default {
       this.onSearchSubmit();
     },
     async fetchCity() {
-      console.log('Fetch city')
       if (!this.searchText) {
         return;
       }
 
+      this.isCityLoading = true;
       this.currentCity = await this.searchCityByLocationName(this.searchText);
-      this.isShowErrorMessage = !this.currentCity;
+      this.isCityLoading = false;
+      this.isShowNoEnteredCityMessage = !this.currentCity;
     },
     async fetchWeather() {
-      this.currentWeather = await getCurrentWeatherForLocation({
-        lon: this.currentCity.lon,
-        lat: this.currentCity.lat
-      }, this.$i18n.locale);
+      if (!this.currentCity) {
+        return;
+      }
+
+      this.isWeatherLoading = true;
+      const { lon, lat } = this.currentCity;
+      this.currentWeather = await getCurrentWeatherForLocation({ lon, lat }, this.$i18n.locale);
+      this.isWeatherLoading = false;
     },
     getWeatherIconUrlByName,
   },
   watch: {
     searchText() {
-      this.isShowErrorMessage = false;
+      this.isShowNoEnteredCityMessage = false;
     },
     currentCity() {
       this.fetchWeather();
@@ -125,7 +141,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.weather-card {
-  background: linear-gradient(45deg, rgb(2, 136, 209), rgb(38, 198, 218));
-}
 </style>
