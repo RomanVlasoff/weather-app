@@ -86,9 +86,6 @@ export default {
       currentCity: null,
       weather: null,
       isShowNoEnteredCityMessage: false,
-      searchFieldRules: [
-        () => !!this.searchText && this.searchText.length > 0 || this.$t('errors.cityNameIsRequired'),
-      ]
     }
   },
   computed: {
@@ -112,6 +109,9 @@ export default {
     },
     inputErrorMessages() {
       return this.isShowNoEnteredCityMessage ? [this.$t('errors.noCityWithEnteredName')] : [];
+    },
+    searchFieldRules() {
+      return [ !!this.searchText && this.searchText.length > 0 || this.$t('errors.cityNameIsRequired', this.currentLocale) ];
     }
   },
   methods: {
