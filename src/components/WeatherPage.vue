@@ -39,7 +39,7 @@
     </v-slide-y-reverse-transition>
 
     <v-fade-transition>
-      <v-slide-group v-if="weather"
+      <v-slide-group v-if="currentCity && weather"
                      v-show="!isWeatherLoading"
                      multiple
                      show-arrows
