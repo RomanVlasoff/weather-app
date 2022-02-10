@@ -34,7 +34,20 @@
                   :alt="formattedData.state"
                   width="160"
                   height="120"
-              />
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                  >
+                    <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                    />
+                  </v-row>
+                </template>
+              </v-img>
             </div>
             <div class="d-flex flex-column">
               <span>{{ formattedData.state }}</span>
@@ -75,7 +88,10 @@ export default {
       required: true,
     },
     imageUrl: String,
-    state: String,
+    state: {
+      type: String,
+      default: ''
+    },
     temp: {
       type: [String, Number],
       required: true
@@ -95,11 +111,10 @@ export default {
   },
   computed: {
     formattedData() {
-      let date, hours, minutes;
+      let date, time;
       if (this.timeStamp) {
-        date = new Date((this.timeStamp + (this.timeZone)) * 1000);
-        hours = date.getUTCHours().toLocaleString(this.$i18n.locale, {minimumIntegerDigits: 2});
-        minutes = date.getUTCMinutes().toLocaleString(this.$i18n.locale, {minimumIntegerDigits: 2});
+        date = new Date(this.timeStamp * 1000);
+        time = date.toLocaleTimeString('ru', { timeZone: this.timeZone, hour: '2-digit', minute: '2-digit' });
       }
 
       const safeFormat = (value, formatter, defaultValue = '') => {
@@ -107,7 +122,7 @@ export default {
       }
 
       return {
-        state: safeFormat(this.state, () => capitalizeFirstLetter(this.state)),
+        state: capitalizeFirstLetter(this.state),
         temp: safeFormat(this.temp, () => formatTemperature(this.temp)),
         feelsLikeTemp: safeFormat(this.feelsLikeTemp, () => this.$t('feelsLike', {temp: formatTemperature(this.feelsLikeTemp)})),
         maxMinTemp: this.maxTemp != null && this.minTemp != null
@@ -124,7 +139,7 @@ export default {
               direction: this.$t(`wind.directions.${getWindDirection(this.windDeg)}`)
             })
             : null,
-        time: safeFormat(date, () => this.$t('timeNow', {time: `${hours}:${minutes}`})),
+        time: safeFormat(date, () => this.$t('timeNow', { time })),
       }
     },
     mainProperties() {

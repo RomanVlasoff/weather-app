@@ -13,6 +13,7 @@ export default {
     timeNow: 'Now {time}',
     humidity: 'Humidity',
     pressure: 'Atmosphere pressure',
+    today: 'Today',
     wind: {
         wind: 'Wind',
         speedAndDirection: '{speed} m/s, {direction}',

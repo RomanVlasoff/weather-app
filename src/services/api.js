@@ -7,8 +7,8 @@ export function getCityByLocationName(name) {
         .then(response => Promise.resolve(response.data.length ? response.data[0] : null));
 }
 
-export function getCurrentWeatherForLocation({lon, lat}, lang = 'en') {
-    return axios.get(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lon}&appid=${API_KEY}&lang=${lang}`)
+export function getWeatherForLocation({lon, lat}, lang = 'en') {
+    return axios.get(`https://api.openweathermap.org/data/2.5/onecall?units=metric&lat=${lat}&lon=${lon}&appid=${API_KEY}&lang=${lang}&exclude=minutely,hourly,alerts`)
         .then(response => Promise.resolve(response.data));
 }
 
